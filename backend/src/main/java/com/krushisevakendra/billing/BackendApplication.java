@@ -1,4 +1,4 @@
-package com.krushiseva.backend;
+package com.krushisevakendra.billing;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

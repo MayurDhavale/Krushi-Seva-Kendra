@@ -1,4 +1,4 @@
-package com.krushiseva.backend;
+package com.krushisevakendra.billing;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
