@@ -1,6 +1,7 @@
 package com.krushisevakendra.billing.health.controller;
 
 import com.krushisevakendra.billing.common.response.ApiResponse;
+import com.krushisevakendra.billing.exception.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,11 +14,13 @@ public class HealthController {
     @GetMapping
     public ResponseEntity<ApiResponse<String>> checkHealth(){
 
-        ApiResponse<String> response = ApiResponse.<String>builder()
-                .success(true)
-                .message("Krushi Seva Kendra Backend is running successfully.")
-                .data("Application is UP")
-                .build();
-        return ResponseEntity.ok(response);
+//        ApiResponse<String> response = ApiResponse.<String>builder()
+//                .success(true)
+//                .message("Krushi Seva Kendra Backend is running successfully.")
+//                .data("Application is UP")
+//                .build();
+//        return ResponseEntity.ok(response);
+
+        throw new ResourceNotFoundException("Testing Global Exception");
     }
 }
