@@ -1,4 +1,4 @@
-package com.krushisevakendra.billing.security.config;
+package com.krushisevakendra.billing.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
