@@ -1,4 +1,4 @@
-package com.krushisevakendra.billing.security;
+package com.krushisevakendra.billing.auth.security;
 
 import com.krushisevakendra.billing.auth.entity.User;
 import lombok.RequiredArgsConstructor;
