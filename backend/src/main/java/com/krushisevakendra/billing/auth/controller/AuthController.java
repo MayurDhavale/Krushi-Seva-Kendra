@@ -1,5 +1,6 @@
 package com.krushisevakendra.billing.auth.controller;
 
+import com.krushisevakendra.billing.auth.dto.LoginRequest;
 import com.krushisevakendra.billing.auth.dto.RegisterRequest;
 import com.krushisevakendra.billing.auth.service.AuthService;
 import com.krushisevakendra.billing.common.response.ApiResponse;
@@ -18,5 +19,10 @@ public class AuthController {
     @PostMapping("/register")
     public ApiResponse<String> register(@Valid @RequestBody RegisterRequest request){
         return authService.register(request);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<?>> login(@Valid @RequestBody LoginRequest request){
+        return ResponseEntity.ok(authService.login(request));
     }
 }

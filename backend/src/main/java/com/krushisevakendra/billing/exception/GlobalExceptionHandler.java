@@ -1,7 +1,9 @@
 package com.krushisevakendra.billing.exception;
 
+import com.krushisevakendra.billing.common.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -72,4 +74,17 @@ public class GlobalExceptionHandler {
 
         return  ResponseEntity.badRequest().body(response);
     }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiResponse<?>> handleBadCredentials(
+            BadCredentialsException ex) {
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error(
+                        "Invalid username or password",
+                        HttpStatus.UNAUTHORIZED.value()
+                ));
+    }
+
+
 }
