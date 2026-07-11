@@ -89,4 +89,19 @@ public class CategoryController {
         );
     }
 
+    //SOFT Delete
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteCategory(@PathVariable Long id){
+
+        categoryService.deleteCategory(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.success(
+                        "Category deleted successfully.",
+                        HttpStatus.OK.value(),
+                        null
+                )
+        );
+    }
+
 }

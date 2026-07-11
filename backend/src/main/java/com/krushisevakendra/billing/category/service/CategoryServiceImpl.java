@@ -62,7 +62,7 @@ public class CategoryServiceImpl implements  CategoryService{
     @Override
     public CategoryResponse getCategoryById(Long id) {
 
-        Category category = categoryRepository.findById(id)
+        Category category = categoryRepository.findByIdAndActiveTrue(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Category not found with id : " + id));
 
         return categoryMapper.toResponse(category);
@@ -72,7 +72,7 @@ public class CategoryServiceImpl implements  CategoryService{
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
 
         //Find Existing category
-        Category category = categoryRepository.findById(id)
+        Category category = categoryRepository.findByIdAndActiveTrue(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Category not found with id : "+ id));
 
         //Check duplicate name
@@ -88,5 +88,16 @@ public class CategoryServiceImpl implements  CategoryService{
         Category updatedCategory = categoryRepository.save(category);
 
         return categoryMapper.toResponse(updatedCategory);
+    }
+
+    @Override
+    public void deleteCategory(Long id) {
+
+        Category category = categoryRepository.findByIdAndActiveTrue(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Category Not Found with id : "+ id));
+
+        category.setActive(false);
+
+        categoryRepository.save(category);
     }
 }
