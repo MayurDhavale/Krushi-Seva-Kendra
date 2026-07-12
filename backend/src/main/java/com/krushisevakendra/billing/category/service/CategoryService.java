@@ -2,7 +2,9 @@ package com.krushisevakendra.billing.category.service;
 
 import com.krushisevakendra.billing.category.dto.CategoryRequest;
 import com.krushisevakendra.billing.category.dto.CategoryResponse;
+import com.krushisevakendra.billing.category.entity.Category;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface CategoryService {
 
@@ -20,4 +22,6 @@ public interface CategoryService {
     CategoryResponse updateCategory(Long id, CategoryRequest request);
 
     void deleteCategory(Long id);
+
+    Page<CategoryResponse> searchCategories(String keyword, Pageable pageable);
 }

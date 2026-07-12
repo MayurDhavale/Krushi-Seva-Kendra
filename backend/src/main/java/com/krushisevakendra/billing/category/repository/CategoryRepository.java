@@ -20,5 +20,13 @@ public interface CategoryRepository extends JpaRepository<Category,Long> {
 
     Optional<Category> findByIdAndActiveTrue(Long id);
 
+    //for search API
+    Page<Category> findByActiveTrueAndNameContainingIgnoreCase(
+            String keyword,
+            Pageable pageable
+    );
+
+
+
 
 }

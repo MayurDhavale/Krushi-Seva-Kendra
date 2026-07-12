@@ -100,4 +100,12 @@ public class CategoryServiceImpl implements  CategoryService{
 
         categoryRepository.save(category);
     }
+
+    @Override
+    public Page<CategoryResponse> searchCategories(String keyword, Pageable pageable){
+
+        Page<Category> categories = categoryRepository.findByActiveTrueAndNameContainingIgnoreCase(keyword, pageable);
+
+        return categories.map(categoryMapper::toResponse);
+    }
 }

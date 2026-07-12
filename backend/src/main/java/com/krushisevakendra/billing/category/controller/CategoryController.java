@@ -7,6 +7,9 @@ import com.krushisevakendra.billing.common.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -100,6 +103,38 @@ public class CategoryController {
                         "Category deleted successfully.",
                         HttpStatus.OK.value(),
                         null
+                )
+        );
+    }
+
+    //Search Category
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<Page<CategoryResponse>>> searchCategories(
+
+            @RequestParam String keyword,
+
+            @RequestParam(defaultValue = "0") int page,
+
+            @RequestParam(defaultValue = "10") int size,
+
+            @RequestParam(defaultValue = "name") String sortBy,
+
+            @RequestParam(defaultValue = "asc") String direction
+    ){
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page,size,sort);
+
+        Page<CategoryResponse> responses = categoryService.searchCategories(keyword,pageable);
+
+        return ResponseEntity.ok(
+                ApiResponse.success(
+                        "Categories Fetched successfully",
+                        HttpStatus.OK.value(),
+                        responses
                 )
         );
     }
