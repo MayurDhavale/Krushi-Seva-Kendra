@@ -23,6 +23,8 @@ public class ProductResponseDto {
 
     private BigDecimal sellingPrice;
 
+    private BigDecimal gstRate;
+
     private Integer stockQuantity;
 
     private Unit unit;

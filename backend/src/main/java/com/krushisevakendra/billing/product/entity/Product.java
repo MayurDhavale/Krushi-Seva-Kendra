@@ -34,6 +34,9 @@ public class Product extends BaseEntity {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal sellingPrice;
 
+    @Column(name = "gst_rate", nullable = false, precision = 5, scale = 2)
+    private BigDecimal gstRate;
+
     @Column(nullable = false)
     private Integer stockQuantity;
 
@@ -48,6 +51,7 @@ public class Product extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
 
 }
 

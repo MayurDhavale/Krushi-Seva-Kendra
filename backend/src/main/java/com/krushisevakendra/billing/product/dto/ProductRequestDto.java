@@ -28,6 +28,11 @@ public class ProductRequestDto {
     @DecimalMin(value = "0.0", inclusive = false, message = "Selling price must be greater than zero.")
     private BigDecimal sellingPrice;
 
+    @NotNull(message = "GST rate is required.")
+    @DecimalMin(value = "0.00", message = "GST rate cannot be negative.")
+    @DecimalMax(value = "100.00", message = "GST rate cannot exceed 100%.")
+    private BigDecimal gstRate;
+
     @NotNull(message = "Stock quantity is required.")
     @Min(value = 0, message = "Stock cannot be negative.")
     private Integer stockQuantity;

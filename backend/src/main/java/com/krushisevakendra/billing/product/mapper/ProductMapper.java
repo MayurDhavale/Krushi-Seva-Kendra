@@ -16,6 +16,7 @@ public class ProductMapper {
         product.setDescription(dto.getDescription());
         product.setPurchasePrice(dto.getPurchasePrice());
         product.setSellingPrice(dto.getSellingPrice());
+        product.setGstRate(dto.getGstRate());
         product.setStockQuantity(dto.getStockQuantity());
         product.setUnit(dto.getUnit());
 
@@ -30,6 +31,7 @@ public class ProductMapper {
                 .description(product.getDescription())
                 .purchasePrice(product.getPurchasePrice())
                 .sellingPrice(product.getSellingPrice())
+                .gstRate(product.getGstRate())
                 .stockQuantity(product.getStockQuantity())
                 .unit(product.getUnit())
                 .active(product.getActive())
