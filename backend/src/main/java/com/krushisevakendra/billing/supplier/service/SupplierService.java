@@ -19,4 +19,6 @@ public interface SupplierService {
     void deleteSupplier(Long id);
 
     Page<SupplierResponseDto> searchSuppliers(String keyword, Pageable pageable);
+
+
 }

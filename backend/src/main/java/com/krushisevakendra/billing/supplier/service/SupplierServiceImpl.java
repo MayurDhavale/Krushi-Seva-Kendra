@@ -4,6 +4,10 @@ package com.krushisevakendra.billing.supplier.service;
 
 import com.krushisevakendra.billing.exception.DuplicateResourceException;
 import com.krushisevakendra.billing.exception.ResourceNotFoundException;
+import com.krushisevakendra.billing.product.entity.Product;
+import com.krushisevakendra.billing.sale.entity.Sale;
+import com.krushisevakendra.billing.sale.entity.SaleItem;
+import com.krushisevakendra.billing.sale.repository.SaleRepository;
 import com.krushisevakendra.billing.supplier.dto.SupplierRequestDto;
 import com.krushisevakendra.billing.supplier.dto.SupplierResponseDto;
 import com.krushisevakendra.billing.supplier.entity.Supplier;
@@ -24,6 +28,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     private final SupplierRepository supplierRepository;
     private final SupplierMapper supplierMapper;
+    private final SaleRepository saleRepository;
 
     @Override
     @Transactional
@@ -155,4 +160,6 @@ public class SupplierServiceImpl implements SupplierService {
                 )
                 .map(supplierMapper::toResponse);
     }
+
+
 }
