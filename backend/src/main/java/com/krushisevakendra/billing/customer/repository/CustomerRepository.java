@@ -28,6 +28,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             Pageable pageable
     );
 
+    long countByActiveTrue();
+
 
 
 }

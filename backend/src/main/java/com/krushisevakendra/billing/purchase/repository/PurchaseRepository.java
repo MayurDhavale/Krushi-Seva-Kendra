@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface PurchaseRepository extends JpaRepository<Purchase,Long> {
@@ -39,4 +41,41 @@ public interface PurchaseRepository extends JpaRepository<Purchase,Long> {
             @Param("toDate")LocalDate toDate,
             Pageable pageable
             );
+
+    @Query("""
+        SELECT COALESCE(SUM(p.totalAmount), 0)
+        FROM Purchase p
+        WHERE p.active = true
+        AND p.purchaseDate = :today
+        """)
+    BigDecimal getTodayPurchases(@Param("today") LocalDate today);
+
+    List<Purchase> findTop5ByActiveTrueOrderByCreatedAtDesc();
+
+    @Query("""
+       SELECT MONTH(p.purchaseDate),
+              COALESCE(SUM(p.totalAmount),0)
+       FROM Purchase p
+       WHERE p.active = true
+       AND YEAR(p.purchaseDate)=:year
+       GROUP BY MONTH(p.purchaseDate)
+       ORDER BY MONTH(p.purchaseDate)
+       """)
+    List<Object[]> getMonthlyPurchases(@Param("year") int year);
+
+    List<Purchase> findByActiveTrueAndPurchaseDateBetweenOrderByPurchaseDateAsc(
+            LocalDate fromDate,
+            LocalDate toDate
+    );
+
+    @Query("""
+       SELECT COALESCE(SUM(p.totalAmount),0)
+       FROM Purchase p
+       WHERE p.active = true
+       AND p.purchaseDate BETWEEN :fromDate AND :toDate
+       """)
+    BigDecimal getTotalPurchaseAmountBetween(
+            @Param("fromDate") LocalDate fromDate,
+            @Param("toDate") LocalDate toDate
+    );
 }

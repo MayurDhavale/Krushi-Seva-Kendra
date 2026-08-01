@@ -31,4 +31,6 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
             Pageable pageable
     );
 
+    long countByActiveTrue();
+
 }

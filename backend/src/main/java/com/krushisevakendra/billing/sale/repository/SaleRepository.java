@@ -8,7 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -41,5 +43,53 @@ public interface SaleRepository extends JpaRepository<Sale,Long> {
             @Param("fromDate") LocalDate fromDate,
             @Param("toDate") LocalDate toDate,
             Pageable pageable
+    );
+
+    @Query("""
+        SELECT COALESCE(SUM(s.totalAmount), 0)
+        FROM Sale s
+        WHERE s.active = true
+        AND s.saleDate = :today
+        """)
+    BigDecimal getTodaySales(@Param("today") LocalDate today);
+
+    List<Sale> findTop5ByActiveTrueOrderByCreatedAtDesc();
+
+    @Query("""
+       SELECT MONTH(s.saleDate),
+              COALESCE(SUM(s.totalAmount), 0)
+       FROM Sale s
+       WHERE s.active = true
+       AND YEAR(s.saleDate) = :year
+       GROUP BY MONTH(s.saleDate)
+       ORDER BY MONTH(s.saleDate)
+       """)
+    List<Object[]> getMonthlySales(@Param("year") int year);
+
+    List<Sale> findByActiveTrueAndSaleDateBetweenOrderBySaleDateAsc(
+            LocalDate fromDate,
+            LocalDate toDate
+    );
+
+    @Query("""
+       SELECT COALESCE(SUM(s.totalAmount),0)
+       FROM Sale s
+       WHERE s.active = true
+       AND s.saleDate BETWEEN :fromDate AND :toDate
+       """)
+    BigDecimal getTotalSalesBetween(
+            @Param("fromDate") LocalDate fromDate,
+            @Param("toDate") LocalDate toDate
+    );
+
+    @Query("""
+SELECT COALESCE(SUM(s.totalAmount),0)
+FROM Sale s
+WHERE s.active=true
+AND s.saleDate BETWEEN :fromDate AND :toDate
+""")
+    BigDecimal getTotalSales(
+            @Param("fromDate") LocalDate fromDate,
+            @Param("toDate") LocalDate toDate
     );
 }
