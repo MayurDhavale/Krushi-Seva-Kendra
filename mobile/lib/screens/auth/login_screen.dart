@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/login_request.dart';
+import 'package:mobile/routes/app_routes.dart';
+import 'package:mobile/services/api_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
 
 class LoginScreen extends StatefulWidget{
   const LoginScreen({super.key});
@@ -11,12 +17,16 @@ State<LoginScreen> createState() => _LoginScreenState();
 
 class _LoginScreenState extends State<LoginScreen>{
 
+  final ApiService apiService = ApiService();
+
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController userNameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   bool obsecurePassword = true;
+
+  bool isLoading = false;
 
 
 
@@ -52,28 +62,25 @@ class _LoginScreenState extends State<LoginScreen>{
                 SizedBox(height: 20,),
 
                 TextFormField(
-                  controller : emailController,
-                  keyboardType : TextInputType.emailAddress,
+                  controller : userNameController,
+                  keyboardType : TextInputType.text,
                   decoration : const InputDecoration(
-                    labelText: "Email",
-                    hintText: "Enter your Email",
-                    prefixIcon: Icon(Icons.email_outlined),
+                    labelText: "UserName",
+                    hintText: "Enter your UserName",
+                    prefixIcon: Icon(Icons.person),
                     border: OutlineInputBorder(),
                   ),
 
                   validator: (value){
                     if(value == null || value.trim().isEmpty){
-                      return "Please Enter your email";
+                      return "Please Enter your username";
                     }
-                    if(!value.contains("@")){
-                      return "Enter a valid email";
-                    }
+                  
 
                     return null;
                   },
                 ),
                 const SizedBox(height: 20,),
-
                 TextFormField(
                   controller: passwordController,
                   obscureText: obsecurePassword,
@@ -101,28 +108,69 @@ class _LoginScreenState extends State<LoginScreen>{
                     if(value.length < 6){
                       return "Password must be at least 6 characters";
                     }
-
                     return null;
-
                   },
-          
                 ),
-
                 SizedBox(height: 20,),
 
                 SizedBox(
-                
-                  width: double.infinity,
-                  child: ElevatedButton(onPressed:(){
-                    if(_formKey.currentState!.validate()){
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Validation Sucessful."),
-                        ),
-                      );
-                    }
-                  }, 
-                  child: const Text("LOGIN"),
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: isLoading 
+                    ? null 
+                    :() async {
+                      if(_formKey.currentState!.validate()){
+                        setState(() {
+                          isLoading = true;
+                        });
+                        try{
+                          final response = await apiService.login(
+                            LoginRequest(
+                              username: userNameController.text.trim(), 
+                              password: passwordController.text
+                              ),
+                          );
+
+                          final prefs = await SharedPreferences.getInstance();
+
+                          await prefs.setString("accessToken", response.accessToken);
+
+                          await prefs.setString("username", response.username);
+
+                          await prefs.setString("role",response.role);
+
+                          await prefs.setString("tokenType", response.tokenType);
+
+                          if(!mounted) return;
+
+                          Navigator.pushReplacementNamed(context, AppRoutes.dashboard);
+
+                        }
+                        catch(ex){
+
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(ex.toString())));
+                          print(ex.toString());
+                        }
+                        finally{
+                          if(mounted){
+                            setState(() {
+                              isLoading = false;
+                            });
+                          }
+                        }
+                      }
+                    },
+                    child: isLoading
+                    ? const SizedBox(
+                      height: 22,
+                      width: 22,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                      ),
+                    )
+                    : const Text("LOGIN"),
                   ),
+                    
                 )
 
                 

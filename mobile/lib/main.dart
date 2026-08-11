@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/routes/app_pages.dart';
 import 'package:mobile/splash/splash_screen.dart';
 
 import 'core/theme/app_thems.dart' ;
@@ -19,13 +20,14 @@ class KrushiSevaKendraApp extends StatelessWidget {
     debugShowCheckedModeBanner: false,
     theme: AppThems.lightTheme,
 
-    initialRoute: AppRoutes.login,
+    initialRoute: AppRoutes.splash,
+    routes : AppPages.routes
 
-    routes: {
+   // routes: {
 
-      AppRoutes.login : (_) => const LoginScreen(),
-      AppRoutes.splash : (_) => const SplashScreen(),
-    },
+      // AppRoutes.login : (_) => const LoginScreen(),
+      // AppRoutes.splash : (_) => const SplashScreen(),
+   // },
    );
   }
 }
